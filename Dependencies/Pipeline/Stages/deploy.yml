@@ -1,0 +1,59 @@
+parameters:
+  - name: environment
+    type: string
+    
+  - name: databricks_environment
+    type: string
+    
+  - name: artifactName
+    type: string
+    
+  - name: archiveFile
+    type: string
+      
+jobs:
+- job: Deploy
+  displayName: Deploy ${{ parameters.environment }}
+  variables:
+    - template: ../Configuration/${{ parameters.environment }}.variables.yml  
+  pool:
+    vmImage: 'windows-latest'
+    environment: ${{ parameters.environment }}
+  steps:
+  - download: none
+
+  - task: DownloadBuildArtifacts@1
+    displayName: 'Download Databricks Bundle'
+    inputs:
+      buildType: 'current'
+      downloadType: 'single'
+      artifactName: '${{ parameters.artifactName }}' 
+      downloadPath: '$(Pipeline.Workspace)'
+
+  - task: ExtractFiles@1
+    displayName: 'Extract Databricks Bundle'
+    inputs:
+      archiveFilePatterns: '$(Pipeline.Workspace)/${{ parameters.artifactName }}/${{ parameters.archiveFile }}'
+      destinationFolder: '$(Pipeline.Workspace)/${{ parameters.archiveFile }}'
+      cleanDestinationFolder: true
+      overwriteExistingFiles: true
+
+  - task: AzureCLI@2
+    displayName: 'Deploy Databricks Bundle'
+    inputs:
+      azureSubscription: ${{ variables.subscription }}
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |            
+        $(Pipeline.Workspace)/${{ parameters.archiveFile }}/Dependencies/databricks_cli/databricks.exe --version
+        
+        $env:DATABRICKS_TOKEN     = $($(az account get-access-token --resource 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d) | ConvertFrom-Json).accessToken
+        $env:DATABRICKS_HOST      = "${{ variables.host }}"
+        $env:DATABRICKS_AUTH_TYPE = "pat"
+        $env:DATABRICKS_CONFIG_PROFILE = "DEFAULT"
+
+        cd $(Pipeline.Workspace)/${{ parameters.archiveFile }}/Databricks_Bundle
+        
+        $(Pipeline.Workspace)/${{ parameters.archiveFile }}/Dependencies/databricks_cli/databricks.exe bundle validate -t ${{ parameters.databricks_environment }}
+
+        $(Pipeline.Workspace)/${{ parameters.archiveFile }}/Dependencies/databricks_cli/databricks.exe bundle deploy -t ${{ parameters.databricks_environment }}

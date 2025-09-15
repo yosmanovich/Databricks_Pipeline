@@ -1,0 +1,33 @@
+trigger:
+- master
+variables:
+  - template: Configuration/app.variables.yml  
+
+stages:
+- stage: Build
+  displayName: 'Package Databricks Bundle'
+  jobs: 
+    - template: Stages/build.yml
+      parameters:
+        artifactName:  ${{ variables.artifactName }}
+        archiveFile:  ${{ variables.archiveFile }}        
+        
+- stage: Deploy  
+  displayName: 'Deploy Databricks Bundle to Dev'
+  jobs: 
+    - template: Stages/deploy.yml
+      parameters:
+        environment: 'Dev'    
+        databricks_environment:  ${{ variables.databricks_environment }}
+        artifactName:  ${{ variables.artifactName }}
+        archiveFile:  ${{ variables.archiveFile }}        
+
+- stage: Deploy  
+  displayName: 'Deploy Databricks Bundle to Prod'
+  jobs: 
+    - template: Stages/deploy.yml
+      parameters:
+        environment: 'Prod'    
+        databricks_environment:  ${{ variables.databricks_environment }}
+        artifactName:  ${{ variables.artifactName }}
+        archiveFile:  ${{ variables.archiveFile }}               

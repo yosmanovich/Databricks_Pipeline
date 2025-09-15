@@ -1,0 +1,32 @@
+parameters:   
+  - name: artifactName
+    type: string
+    
+  - name: archiveFile
+    type: string
+    
+jobs:
+- job: Build
+  pool:
+    vmImage: 'windows-latest'
+
+  steps:
+#  - task: PowerShell@2
+#    displayName: 'Validate Build'
+#    inputs:
+#      targetType: 'inline'
+#      script: |
+#        $(Build.SourcesDirectory)\Dependencies\databricks_cli\databricks.exe bundle validate 
+
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.SourcesDirectory)/*'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.archiveFile }}'
+      replaceExistingArchive: true
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: ${{ parameters.artifactName }}

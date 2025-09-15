@@ -1,0 +1,5 @@
+variables:
+- name: host
+  value: 'https://xxxxxxxxx.azuredatabricks.net'
+- name: subscription
+  value: 'ADO'  

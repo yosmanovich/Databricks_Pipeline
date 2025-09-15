@@ -1,0 +1,7 @@
+variables:
+- name: artifactName
+  value: 'databricks_package'
+- name: archiveFile
+  value: 'DataBricks.zip'  
+- name: databricks_environment
+  value: 'dev'
