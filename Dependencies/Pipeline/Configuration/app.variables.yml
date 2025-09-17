@@ -5,3 +5,5 @@ variables:
   value: 'DataBricks.zip'  
 - name: databricks_environment
   value: 'dev'
+- name: poolName
+  value: 'default'  

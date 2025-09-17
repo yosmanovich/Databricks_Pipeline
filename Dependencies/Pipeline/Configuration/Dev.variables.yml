@@ -3,3 +3,5 @@ variables:
   value: 'https://xxxxxxxxx.azuredatabricks.net'
 - name: subscription
   value: 'ADO'  
+- name: PoolName
+  value: 'default'  

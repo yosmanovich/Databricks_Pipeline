@@ -17,7 +17,7 @@ jobs:
   variables:
     - template: ../Configuration/${{ parameters.environment }}.variables.yml  
   pool:
-    vmImage: 'windows-latest'
+    name: ${{ variables.poolName }}    
     environment: ${{ parameters.environment }}
   steps:
   - download: none

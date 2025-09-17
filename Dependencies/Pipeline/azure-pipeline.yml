@@ -12,7 +12,7 @@ stages:
         artifactName:  ${{ variables.artifactName }}
         archiveFile:  ${{ variables.archiveFile }}        
         
-- stage: Deploy  
+- stage: Deploy_Dev  
   displayName: 'Deploy Databricks Bundle to Dev'
   jobs: 
     - template: Stages/deploy.yml
@@ -22,7 +22,7 @@ stages:
         artifactName:  ${{ variables.artifactName }}
         archiveFile:  ${{ variables.archiveFile }}        
 
-- stage: Deploy  
+- stage: Deploy_Prod  
   displayName: 'Deploy Databricks Bundle to Prod'
   jobs: 
     - template: Stages/deploy.yml
