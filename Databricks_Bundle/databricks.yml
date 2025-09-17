@@ -7,7 +7,7 @@ experimental:
 artifacts:
   python_artifact:
     type: whl
-    build: python3 setup.py bdist wheel
+    build: python setup.py bdist wheel
     path: .    
 
 include:
