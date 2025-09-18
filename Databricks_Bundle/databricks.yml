@@ -1,24 +1,17 @@
 bundle:
   name: databricks_app
 
-experimental:
-  python_wheel_wrapper: true
+sync:
+  include:
+    - src/**
 
-artifacts:
-  python_artifact:
-    type: whl
-    build: pip wheel . --wheel-dir dist
-    path: .    
-
-#include:
-#  - resources/*.yml
-#  - resources/*/*.yml
-
+include:
+  - resources/*.yml
+  
 targets:
   dev:
     mode: development
     default: true
-
     presets:
       artifacts_dynamic_version: true
 
