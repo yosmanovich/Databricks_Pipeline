@@ -10,9 +10,9 @@ artifacts:
     build: pip wheel . --wheel-dir dist
     path: .    
 
-include:
-  - resources/*.yml
-  - resources/*/*.yml
+#include:
+#  - resources/*.yml
+#  - resources/*/*.yml
 
 targets:
   dev:
