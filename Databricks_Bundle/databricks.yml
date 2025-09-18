@@ -7,7 +7,7 @@ experimental:
 artifacts:
   python_artifact:
     type: whl
-    build: python setup.py bdist wheel
+    build: pip wheel . --wheel-dir dist
     path: .    
 
 include:
@@ -24,3 +24,5 @@ targets:
 
   prod:
     mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
