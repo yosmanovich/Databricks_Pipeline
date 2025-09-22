@@ -1,28 +1,16 @@
 parameters:
 - name: environment
   type: string
-  default: 'dev'
+  default: 'Dev'
   displayName: 'Environment'
   values:
   - Dev
   - ITS
   - Prod
 
-variables:
-  - template: Configuration/${{ parameters.environment }}.variables.yml  
-
-pool:
-  name: ${{ variables.poolName }}
-  environment: ${{ parameters.environment }}
-
-steps:
-- download: none
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      $hostname = "${{ variables.host }}"
-      $hostname = $hostname.Replace("https://", "").Replace("http://", "")
-      Write-Host $hostname
-      nslookup $hostname      
+stages:
+- stage: Nslookup
+  jobs: 
+    - template: Stages/nslookup.yml
+      parameters:
+        environment: ${{ parameters.environment }}    
