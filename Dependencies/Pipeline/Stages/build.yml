@@ -11,22 +11,28 @@ jobs:
     name: ${{ variables.poolName }}    
 
   steps:
-#  - task: PowerShell@2
-#    displayName: 'Validate Build'
-#    inputs:
-#      targetType: 'inline'
-#      script: |
-#        $(Build.SourcesDirectory)\Dependencies\databricks_cli\databricks.exe bundle validate 
+  - task: CopyFiles@2
+    displayName: 'Copy needed files'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)'
+      Contents: |
+        Dependencies/databricks_cli/**
+        Databricks_Bundle/**
+      TargetFolder: '$(Pipeline.Workspace)/build'
+      CleanTargetFolder: true
+      OverWrite: true
 
   - task: ArchiveFiles@2
+    displayName: 'Archive files'
     inputs:
-      rootFolderOrFile: '$(Build.SourcesDirectory)/*'
+      rootFolderOrFile: '$(Pipeline.Workspace)/build'
       includeRootFolder: true
       archiveType: 'zip'
       archiveFile: '$(Build.ArtifactStagingDirectory)/${{ parameters.archiveFile }}'
       replaceExistingArchive: true
 
   - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: ${{ parameters.artifactName }}'
     inputs:
       pathToPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: ${{ parameters.artifactName }}

@@ -1,5 +1,6 @@
 trigger:
-- master
+- main
+
 variables:
   - template: Configuration/app.variables.yml  
 
