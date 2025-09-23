@@ -1,6 +1,11 @@
 trigger:
-- main
-
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - Dependencies
+    - Databricks_Bundle
 variables:
   - template: Configuration/app.variables.yml  
 
