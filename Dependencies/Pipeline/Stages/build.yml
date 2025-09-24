@@ -4,15 +4,14 @@ parameters:
     
   - name: archiveFile
     type: string
-    
+  
+  - name: bundleDirectory
+    type: string    
+
 jobs:
 - job: Build
-  
-  variables:
-    - template: ../Configuration/app.variables.yml  
-
   pool:
-    name: ${{ variables.poolName }}    
+    vmImage: 'windows-latest'
 
   steps:
   - task: CopyFiles@2
@@ -21,7 +20,7 @@ jobs:
       SourceFolder: '$(Build.SourcesDirectory)'
       Contents: |
         Dependencies/databricks_cli/**
-        Databricks_Bundle/**
+        ${{ parameters.bundleDirectory }}/**
       TargetFolder: '$(Pipeline.Workspace)/build'
       CleanTargetFolder: true
       OverWrite: true

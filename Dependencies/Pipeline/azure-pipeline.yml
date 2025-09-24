@@ -4,8 +4,13 @@ trigger:
     - main
   paths:
     include:
-    - Dependencies
     - Databricks_Bundle
+
+parameters: 
+  - name: bundle_directory
+    type: string    
+    default: 'Databricks_Bundle'
+    
 variables:
   - template: Configuration/app.variables.yml  
 
@@ -17,7 +22,8 @@ stages:
       parameters:
         artifactName:  ${{ variables.artifactName }}
         archiveFile:  ${{ variables.archiveFile }}        
-        
+        bundleDirectory:  ${{ parameters.bundle_directory }}     
+                
 - stage: Deploy_Dev  
   displayName: 'Deploy Databricks Bundle to Dev'
   jobs: 
